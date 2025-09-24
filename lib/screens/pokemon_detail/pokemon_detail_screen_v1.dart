@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:pokemon/data/model/pokemon_detail.dart';
 import 'package:pokemon/data/network/http_api_client.dart';
 
-class PokemonDetailScreen extends StatefulWidget {
+class PokemonDetailScreenV1 extends StatefulWidget {
   final int pokemonId;
 
-  const PokemonDetailScreen({super.key, required this.pokemonId});
+  const PokemonDetailScreenV1({super.key, required this.pokemonId});
 
   @override
-  _PokemonDetailScreenState createState() => _PokemonDetailScreenState();
+  _PokemonDetailScreenV1State createState() => _PokemonDetailScreenV1State();
 }
 
-class _PokemonDetailScreenState extends State<PokemonDetailScreen>
+class _PokemonDetailScreenV1State extends State<PokemonDetailScreenV1>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 

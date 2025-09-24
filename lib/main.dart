@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon/screens/pokemon_detail/pokemon_detail_screen.dart';
-import 'package:pokemon/screens/pokemon_list/pokemon_list_scren_v1.dart';
+import 'package:pokemon/screens/pokemon_detail/pokemon_detail_screen_v2.dart';
+import 'package:pokemon/screens/pokemon_list/pokemon_list_screen_v2.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +32,14 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const PokemonDetailScreen(pokemonId: 1),
+      initialRoute: '/list',
+      routes: {
+        '/list': (context) => const PokemonListScreenV2(),
+        '/detail': (context) => PokemonDetailScreenV2(
+          pokemonId: ModalRoute.of(context)?.settings.arguments as int,
+        ),
+      },
+      //home: const PokemonDetailScreen(pokemonId: 1),
     );
   }
 }

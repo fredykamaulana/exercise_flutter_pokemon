@@ -1,4 +1,5 @@
 import 'package:pokemon/data/model/pokemon.dart';
+import 'package:pokemon/data/model/pokemon_detail.dart';
 import 'package:pokemon/data/network/http_api_client.dart';
 import 'package:pokemon/data/state/remote_state.dart';
 
@@ -17,6 +18,22 @@ class PokemonService {
         final pokemonData = pokemonFromJson(response.body);
 
         return RemoteStateSuccess<Pokemon>(pokemonData);
+      } else {
+        return RemoteStateError(response.toString());
+      }
+    } catch (e) {
+      return RemoteStateError('Failed to load data: ${e.toString()}');
+    }
+  }
+
+  Future<RemoteState> getPokemonDetail({required int id}) async {
+    try {
+      final response = await http.client.get(Uri.parse('${http.baseUrl}/$id'));
+
+      if (response.statusCode == 200) {
+        final pokemonDetail = pokemonDetailFromJson(response.body);
+
+        return RemoteStateSuccess<PokemonDetail>(pokemonDetail);
       } else {
         return RemoteStateError(response.toString());
       }

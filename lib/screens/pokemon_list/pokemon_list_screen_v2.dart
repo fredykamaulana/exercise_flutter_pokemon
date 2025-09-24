@@ -52,7 +52,7 @@ class _PokemonListScreenV2State extends State<PokemonListScreenV2> {
             child: FutureBuilder<RemoteState>(
               future: service.fetchPokemonList(),
               builder: (context, snapshot) {
-                if (snapshot.data == null && snapshot.hasError) {
+                if (snapshot.data == null || snapshot.hasError) {
                   return Center(child: Text('No data to show'));
                 }
 

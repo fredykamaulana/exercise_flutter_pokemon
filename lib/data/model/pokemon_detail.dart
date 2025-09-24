@@ -3,12 +3,38 @@
 //     final pokemonDetail = pokemonDetailFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 PokemonDetail pokemonDetailFromJson(String str) =>
     PokemonDetail.fromJson(json.decode(str));
 
 String pokemonDetailToJson(PokemonDetail data) => json.encode(data.toJson());
+
+final Map<String, Color> typeColors = {
+  "Grass": Colors.green.shade600,
+  "Poison": Colors.purple.shade600,
+  "Fire": Colors.red.shade600,
+  "Flying": Colors.indigo.shade200,
+  "Water": Colors.blue.shade600,
+  "Bug": Colors.green.shade300,
+  "Normal": Colors.grey.shade600,
+  "Electric": Colors.yellow.shade600,
+  "Ground": Colors.brown.shade600,
+  "Fairy": Colors.pink.shade300,
+  "Fighting": Colors.orange.shade600,
+  "Psychic": Colors.pink.shade600,
+  "Rock": Colors.grey.shade800,
+  "Steel": Colors.blueGrey.shade600,
+  "Ice": Colors.cyan.shade200,
+  "Ghost": Colors.indigo.shade600,
+  "Dragon": Colors.teal.shade800,
+  "Dark": Colors.grey.shade900,
+  "Unknown": Colors.white,
+  "Stellar": Colors.amber.shade600,
+};
 
 class PokemonDetail {
   int height;
@@ -52,6 +78,52 @@ class PokemonDetail {
     "types": List<dynamic>.from(types.map((x) => x.toJson())),
     "weight": weight,
   };
+
+  static const maxHp = 300;
+  static const maxAttack = 200;
+  static const maxDefense = 200;
+  static const maxSpeed = 200;
+  static const maxExp = 10000;
+
+  final random = Random();
+  int get exp => random.nextInt(maxExp);
+
+  int get hp => stats.firstWhere((stat) => stat.stat.name == 'hp').baseStat;
+  int get attack =>
+      stats.firstWhere((stat) => stat.stat.name == 'attack').baseStat;
+  int get defense =>
+      stats.firstWhere((stat) => stat.stat.name == 'defense').baseStat;
+  int get speed =>
+      stats.firstWhere((stat) => stat.stat.name == 'speed').baseStat;
+
+  String getHeightString() => '${(height / 10).toStringAsFixed(1)} M';
+  String getWeightString() => '${(weight / 10).toStringAsFixed(1)} kG';
+
+  String getHpString() => "$hp/$maxHp";
+  String getAttackString() => "$attack/$maxAttack";
+  String getDefenseString() => "$defense/$maxDefense";
+  String getSpeedString() => "$speed/$maxSpeed";
+  String getExpString() => "$exp/$maxExp";
+
+  String nameCapitalized() {
+    if (name.isEmpty) return name;
+    return name[0].toUpperCase() + name.substring(1);
+  }
+
+  String typeCapitalized() {
+    final typeName = types.first.type.name;
+    if (typeName.isEmpty) return '';
+    return typeName[0].toUpperCase() + typeName.substring(1);
+  }
+
+  Color color() {
+    final filteredMap = typeColors.entries
+        .where((entry) => entry.key.toLowerCase() == types.first.type.name)
+        .toList();
+    return filteredMap.isNotEmpty
+        ? filteredMap.first.value
+        : Colors.grey.shade400;
+  }
 }
 
 class Species {
