@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon/data/model/pokemon.dart';
 import 'dart:developer' as dev;
 import 'package:pokemon/data/state/remote_state.dart';
 import 'package:pokemon/screens/pokemon_list/pokemon_card.dart';
