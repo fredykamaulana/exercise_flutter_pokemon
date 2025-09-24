@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon/data/model/pokemon.dart';
 import 'dart:developer' as dev;
-import 'package:pokemon/data/service/pokemon_service.dart';
 import 'package:pokemon/data/state/remote_state.dart';
 import 'package:pokemon/screens/pokemon_list/pokemon_card.dart';
+import 'package:pokemon/screens/pokemon_list/provider/pokemon_list_provider.dart';
+import 'package:provider/provider.dart';
 
 class PokemonListScreenV2 extends StatefulWidget {
   const PokemonListScreenV2({super.key});
@@ -14,12 +15,13 @@ class PokemonListScreenV2 extends StatefulWidget {
 
 class _PokemonListScreenV2State extends State<PokemonListScreenV2> {
   final ScrollController _scrollController = ScrollController();
-  final PokemonService service = PokemonService();
 
   @override
   void initState() {
     _scrollController.addListener(_loadMorePokemon);
-    //context.read<PokemonListBloc>().add(FetchPokemons());
+
+    context.read<PokemonListProvider>().fetchPokemonList();
+
     super.initState();
   }
 
@@ -33,7 +35,7 @@ class _PokemonListScreenV2State extends State<PokemonListScreenV2> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       dev.log('Loading more pokemons...');
-      //context.read<PokemonListBloc>().add(FetchPokemons());
+      context.read<PokemonListProvider>().fetchPokemonList();
     }
   }
 
@@ -47,16 +49,13 @@ class _PokemonListScreenV2State extends State<PokemonListScreenV2> {
             currentCrossAxisCount = constraints.maxWidth ~/ 200;
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FutureBuilder<RemoteState>(
-              future: service.fetchPokemonList(),
-              builder: (context, snapshot) {
-                if (snapshot.data == null || snapshot.hasError) {
-                  return Center(child: Text('No data to show'));
-                }
-
-                return CustomScrollView(
+          return Consumer<PokemonListProvider>(
+            builder: (context, provider, child) {
+              print('list: ${provider.pokemonList.toString()}');
+              print('state: ${provider.remoteState.toString()}');
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: CustomScrollView(
                   controller: _scrollController,
                   slivers: [
                     SliverToBoxAdapter(
@@ -81,30 +80,26 @@ class _PokemonListScreenV2State extends State<PokemonListScreenV2> {
                     ),
                     SliverToBoxAdapter(child: const SizedBox(height: 16)),
                     SliverToBoxAdapter(
-                      child: switch (snapshot.data!) {
-                        RemoteStateSuccess<Pokemon>(data: var data) =>
-                          GridView.builder(
-                            shrinkWrap:
-                                true, // Important for nested scrollables
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: currentCrossAxisCount,
-                                  mainAxisSpacing: 8.0,
-                                  crossAxisSpacing: 8.0,
-                                  //childAspectRatio:0.7,
-                                ),
-                            itemCount: data.results.length,
-                            itemBuilder: (context, index) {
-                              return PokemonCard(pokemon: data.results[index]);
-                            },
-                          ),
-                        _ => SizedBox.shrink(),
-                      },
+                      child: GridView.builder(
+                        shrinkWrap: true, // Important for nested scrollables
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: currentCrossAxisCount,
+                          mainAxisSpacing: 8.0,
+                          crossAxisSpacing: 8.0,
+                          //childAspectRatio:0.7,
+                        ),
+                        itemCount: provider.pokemonList.length,
+                        itemBuilder: (context, index) {
+                          return PokemonCard(
+                            pokemon: provider.pokemonList[index],
+                          );
+                        },
+                      ),
                     ),
                     SliverToBoxAdapter(child: const SizedBox(height: 16)),
                     SliverToBoxAdapter(
-                      child: switch (snapshot.data!) {
+                      child: switch (provider.remoteState) {
                         RemoteStateLoading() => const Center(
                           child: CircularProgressIndicator(),
                         ),
@@ -116,9 +111,9 @@ class _PokemonListScreenV2State extends State<PokemonListScreenV2> {
                     ),
                     SliverToBoxAdapter(child: const SizedBox(height: 16)),
                   ],
-                );
-              },
-            ),
+                ),
+              );
+            },
           );
         },
       ),

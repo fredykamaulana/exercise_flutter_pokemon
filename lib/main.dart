@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon/data/service/pokemon_service.dart';
 import 'package:pokemon/screens/pokemon_detail/pokemon_detail_screen_v2.dart';
 import 'package:pokemon/screens/pokemon_list/pokemon_list_screen_v2.dart';
+import 'package:pokemon/screens/pokemon_list/provider/pokemon_list_provider.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider(create: (context) => PokemonService()),
+
+        ChangeNotifierProvider(
+          create: (context) =>
+              PokemonListProvider(service: context.read<PokemonService>()),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
