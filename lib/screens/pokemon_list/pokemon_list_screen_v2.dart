@@ -19,7 +19,15 @@ class _PokemonListScreenV2State extends State<PokemonListScreenV2> {
   void initState() {
     _scrollController.addListener(_loadMorePokemon);
 
-    context.read<PokemonListProvider>().fetchPokemonList();
+    Future.microtask(() {
+      context.read<PokemonListProvider>().fetchPokemonList();
+    });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<PokemonListProvider>().fetchPokemonList();
+    // });
+
+    // context.read<PokemonListProvider>().fetchPokemonList();
 
     super.initState();
   }

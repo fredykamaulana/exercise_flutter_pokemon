@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pokemon/data/service/pokemon_service.dart';
 import 'package:pokemon/data/state/remote_state.dart';
 import 'package:pokemon/screens/pokemon_detail/pokemon_detail_content.dart';
+import 'package:pokemon/screens/pokemon_detail/provider/pokemon_detail_provider.dart';
+import 'package:provider/provider.dart';
 
 class PokemonDetailScreenV2 extends StatefulWidget {
   final int pokemonId;
@@ -20,18 +22,20 @@ class _PokemonDetailScreenV2State extends State<PokemonDetailScreenV2> {
     // context.read<PokemonDetailBloc>().add(
     //   FetchPokemonDetail(pokemonId: widget.pokemonId),
     // );
+
+    Future.microtask(() {
+      context.read<PokemonDetailProvider>().fetchPokemonDetail(
+        widget.pokemonId,
+      );
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<RemoteState>(
-      future: service.getPokemonDetail(id: widget.pokemonId),
-      builder: (context, snapshot) {
-        if (snapshot.data == null || snapshot.hasError) {
-          return SizedBox.shrink();
-        }
-        return switch (snapshot.data!) {
+    return Consumer<PokemonDetailProvider>(
+      builder: (context, provider, child) {
+        return switch (provider.remoteState) {
           RemoteStateLoading() => Center(child: CircularProgressIndicator()),
           RemoteStateError(error: var error) => Center(child: Text(error)),
           RemoteStateSuccess(data: var data) => PokemonDetailContent(

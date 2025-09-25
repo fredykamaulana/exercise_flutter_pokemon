@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon/data/service/pokemon_service.dart';
+import 'package:pokemon/data/state/remote_state.dart';
 import 'package:pokemon/screens/pokemon_detail/pokemon_detail_screen_v2.dart';
+import 'package:pokemon/screens/pokemon_detail/provider/pokemon_detail_provider.dart';
 import 'package:pokemon/screens/pokemon_list/pokemon_list_screen_v2.dart';
 import 'package:pokemon/screens/pokemon_list/provider/pokemon_list_provider.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,10 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) =>
               PokemonListProvider(service: context.read<PokemonService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (context) =>
+              PokemonDetailProvider(service: context.read<PokemonService>()),
         ),
       ],
       child: const MyApp(),
