@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:pokemon/data/model/pokemon.dart';
 import 'package:pokemon/data/model/pokemon_detail.dart';
 import 'package:pokemon/data/network/dio_api_client.dart';
@@ -20,6 +21,8 @@ class PokemonService {
       } else {
         return RemoteStateError(response.toString());
       }
+    } on DioException catch (e) {
+      return RemoteStateError('Failed to load data: ${e.message}');
     } catch (e) {
       return RemoteStateError('Failed to load data: ${e.toString()}');
     }
@@ -36,6 +39,8 @@ class PokemonService {
       } else {
         return RemoteStateError(response.toString());
       }
+    } on DioException catch (e) {
+      return RemoteStateError('Failed to load data: ${e.message}');
     } catch (e) {
       return RemoteStateError('Failed to load data: ${e.toString()}');
     }
