@@ -36,7 +36,7 @@ class PokemonListProvider extends ChangeNotifier {
         case RemoteStateSuccess<Pokemon>(data: var data):
           _pageCount = pageCount + 1;
           _pokemonList.addAll(data.results);
-          _remoteState = RemoteStateSuccess(pokemonList);
+          _remoteState = RemoteStateSuccess<Pokemon>(data);
           // notifyListeners();
           break;
         case RemoteStateError(error: var message):
