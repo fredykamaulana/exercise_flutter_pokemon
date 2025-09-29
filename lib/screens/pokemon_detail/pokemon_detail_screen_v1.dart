@@ -8,7 +8,7 @@ class PokemonDetailScreenV1 extends StatefulWidget {
   const PokemonDetailScreenV1({super.key, required this.pokemonId});
 
   @override
-  _PokemonDetailScreenV1State createState() => _PokemonDetailScreenV1State();
+  State<PokemonDetailScreenV1> createState() => _PokemonDetailScreenV1State();
 }
 
 class _PokemonDetailScreenV1State extends State<PokemonDetailScreenV1>
@@ -119,7 +119,7 @@ class _PokemonDetailScreenV1State extends State<PokemonDetailScreenV1>
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
+                                color: Colors.white.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Text(
@@ -151,7 +151,7 @@ class _PokemonDetailScreenV1State extends State<PokemonDetailScreenV1>
                 Positioned(
                   right: 20,
                   bottom: -20,
-                  child: Container(
+                  child: SizedBox(
                     width: 180,
                     height: 180,
                     child: Image.network(
@@ -256,7 +256,7 @@ class _PokemonDetailScreenV1State extends State<PokemonDetailScreenV1>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...stats.map((stat) => _buildStatRow(stat)).toList(),
+          ...stats.map((stat) => _buildStatRow(stat)),
           const SizedBox(height: 30),
           const Text(
             'Type defenses',
