@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon/data/service/pokemon_service.dart';
-import 'package:pokemon/data/state/remote_state.dart';
+import 'package:pokemon/data/shared_preferences/shared_preferences_helper.dart';
+import 'package:pokemon/screens/image_media/image_media.dart';
 import 'package:pokemon/screens/pokemon_detail/pokemon_detail_screen_v2.dart';
 import 'package:pokemon/screens/pokemon_detail/provider/pokemon_detail_provider.dart';
 import 'package:pokemon/screens/pokemon_list/pokemon_list_screen_v2.dart';
 import 'package:pokemon/screens/pokemon_list/provider/pokemon_list_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +16,13 @@ void main() async {
     MultiProvider(
       providers: [
         Provider(create: (context) => PokemonService()),
+        Provider(
+          create: (context) async => await SharedPreferences.getInstance(),
+        ),
+        Provider(
+          create: (context) =>
+              SharedPreferencesHelper(prefs: context.read<SharedPreferences>()),
+        ),
 
         ChangeNotifierProvider(
           create: (context) =>
@@ -55,12 +64,13 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      initialRoute: '/list',
+      initialRoute: '/image',
       routes: {
         '/list': (context) => const PokemonListScreenV2(),
         '/detail': (context) => PokemonDetailScreenV2(
           pokemonId: ModalRoute.of(context)?.settings.arguments as int,
         ),
+        '/image': (context) => const ImageMedia(),
       },
       //home: const PokemonDetailScreen(pokemonId: 1),
     );
