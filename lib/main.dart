@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon/data/service/pokemon_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemon/screens/pokemon_detail/pokemon_detail_screen_v2.dart';
-import 'package:pokemon/screens/pokemon_list/pokemon_list_screen_v2.dart';
-import 'package:pokemon/screens/pokemon_list/provider/pokemon_list_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:pokemon/screens/pokemon_list/pokemon_list_scren_v1.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
-    MultiProvider(
-      providers: [
-        Provider(create: (context) => PokemonService()),
+    // MultiProvider(
+    //   providers: [
+    //     Provider(create: (context) => PokemonService()),
 
-        ChangeNotifierProvider(
-          create: (context) =>
-              PokemonListProvider(service: context.read<PokemonService>()),
-        ),
-      ],
-      child: const MyApp(),
-    ),
+    //     ChangeNotifierProvider(
+    //       create: (context) =>
+    //           PokemonListProvider(service: context.read<PokemonService>()),
+    //     ),
+    //   ],
+    //   child: const MyApp(),
+    // ),
+    ProviderScope(child: const MyApp()),
   );
 }
 
@@ -51,7 +50,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/list',
       routes: {
-        '/list': (context) => const PokemonListScreenV2(),
+        '/list': (context) => const PokemonListScreenV1(),
         '/detail': (context) => PokemonDetailScreenV2(
           pokemonId: ModalRoute.of(context)?.settings.arguments as int,
         ),

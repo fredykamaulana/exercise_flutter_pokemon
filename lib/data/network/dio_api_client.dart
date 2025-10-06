@@ -14,8 +14,8 @@ class DioApiClient {
     _dio = Dio(
       BaseOptions(
         baseUrl: 'https://pokeapi.co/api/v2/pokemon',
-        connectTimeout: const Duration(milliseconds: 3000),
-        receiveTimeout: const Duration(milliseconds: 3000),
+        connectTimeout: const Duration(milliseconds: 10000),
+        receiveTimeout: const Duration(milliseconds: 10000),
         responseType: ResponseType.json,
         contentType: 'application/json',
         headers: {'Accept': 'application/json'},
