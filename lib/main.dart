@@ -5,6 +5,7 @@ import 'package:pokemon/screens/image_media/image_media.dart';
 import 'package:pokemon/screens/pokemon_detail/pokemon_detail_screen_v2.dart';
 import 'package:pokemon/screens/pokemon_detail/provider/pokemon_detail_provider.dart';
 import 'package:pokemon/screens/pokemon_list/pokemon_list_screen_v2.dart';
+import 'package:pokemon/screens/pokemon_list/pokemon_list_scren_v1.dart';
 import 'package:pokemon/screens/pokemon_list/provider/pokemon_list_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
         '/detail': (context) => PokemonDetailScreenV2(
           pokemonId: ModalRoute.of(context)?.settings.arguments as int,
         ),
-        '/image': (context) => const ImageMedia(),
+        '/image': (context) => const PokemonListScreenV1(),
       },
       //home: const PokemonDetailScreen(pokemonId: 1),
     );
